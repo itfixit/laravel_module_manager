@@ -1,7 +1,7 @@
 <?php namespace Mrabbani\ModuleManager\Providers;
 
+use Closure;
 use \Illuminate\Support\ServiceProvider;
-use File;
 
 class LoadModulesServiceProvider extends ServiceProvider
 {
@@ -40,12 +40,15 @@ class LoadModulesServiceProvider extends ServiceProvider
     public function boot()
     {
         app()->booted(function () {
-            $this->booted();
+            $this->booted(static function() {
+                
+            });
         });
     }
 
-    private function booted()
+    public function booted(Closure $callback)
     {
        \ModulesManagement::setModules($this->modules);
+        $this->bootedCallbacks[] = $callback;
     }
 }

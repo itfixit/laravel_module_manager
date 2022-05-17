@@ -16,7 +16,9 @@ class UninstallModuleServiceProvider extends ServiceProvider
     public function boot()
     {
         app()->booted(function () {
-            $this->booted();
+            $this->booted(static function() {
+                
+            });
         });
     }
 

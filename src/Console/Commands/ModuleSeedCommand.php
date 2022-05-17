@@ -34,7 +34,7 @@ class ModuleSeedCommand extends Command
     }
 
     /**
-     * Load classes from plugin's database/seeds directory
+     * Load classes from plugin's database/seeders directory
      * 
      * @return void
      */
@@ -57,7 +57,7 @@ class ModuleSeedCommand extends Command
      */
     protected function getPath()
     {
-        $path = $this->getModuleInfo('module-path') . 'database/seeds/';
+        $path = $this->getModuleInfo('module-path') . 'database/seeders/';
 
         return $path;
     }

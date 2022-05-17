@@ -83,7 +83,7 @@ class MakeSeeder extends AbstractGenerator
      */
     protected function getPath($name)
     {
-        $path = $this->getModuleInfo('module-path') . 'database/seeds/' . str_replace('\\', '/', $name) . '.php';
+        $path = $this->getModuleInfo('module-path') . 'database/seeders/' . str_replace('\\', '/', $name) . '.php';
 
         return $path;
     }

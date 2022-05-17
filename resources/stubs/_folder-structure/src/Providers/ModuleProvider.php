@@ -26,7 +26,7 @@ class ModuleProvider extends ServiceProvider
             __DIR__ . '/../../resources/views' => config('view.paths')[0] . '/vendor/DummyAlias',
         ], 'views');
         $this->publishes([
-            __DIR__ . '/../../resources/lang' => base_path('resources/lang/vendor/DummyAlias'),
+            __DIR__ . '/../../resources/lang' => base_path('lang/vendor/DummyAlias'),
         ], 'lang');
         $this->publishes([
             __DIR__ . '/../../database' => base_path('database'),
