@@ -49,7 +49,7 @@ class MakeMigration extends Command
     /**
      * Create a new migration install command instance.
      *
-     * @param Composer         $composer
+     * @param Composer $composer
      *
      * @return void
      */
@@ -75,7 +75,7 @@ class MakeMigration extends Command
 
         $create = $this->option('create') ?: false;
 
-        if (! $table && is_string($create)) {
+        if (!$table && is_string($create)) {
             $table = $create;
 
             $create = true;
@@ -90,13 +90,13 @@ class MakeMigration extends Command
     /**
      * Write the migration file to disk.
      *
-     * @param        $name
-     * @param string $table
-     * @param bool   $create
+     * @param             $name
+     * @param string|null $table
+     * @param bool        $create
      *
      * @throws Exception
      */
-    protected function writeMigration($name, string $table, bool $create): void
+    protected function writeMigration($name, ?string $table = null, bool $create = false): void
     {
         $path = $this->getMigrationPath();
 
@@ -117,7 +117,7 @@ class MakeMigration extends Command
      */
     protected function getMigrationPath(): string
     {
-        $module = get_module_information($this->argument('alias'));
+        $module  = get_module_information($this->argument('alias'));
         $baseDir = get_base_folder(array_get($module, 'file'));
 
         return $baseDir . 'database/migrations';
