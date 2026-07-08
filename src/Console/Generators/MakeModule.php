@@ -3,6 +3,7 @@
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 
 class MakeModule extends Command
 {
@@ -65,7 +66,7 @@ class MakeModule extends Command
             $this->moduleType = 'module';
         }
 
-        $this->container['alias'] = snake_case($this->argument('alias'));
+        $this->container['alias'] = Str::snake($this->argument('alias'));
 
         $this->step1();
     }
@@ -73,10 +74,10 @@ class MakeModule extends Command
     private function step1()
     {
         $this->moduleFolderName = $this->ask('Module folder name:', $this->container['alias']);
-        $this->container['name'] = $this->ask('Name of module:', config('app.name') . ' '. str_slug($this->container['alias']));
+        $this->container['name'] = $this->ask('Name of module:', config('app.name') . ' '. Str::slug($this->container['alias']));
         $this->container['author'] = $this->ask('Author of module:');
         $this->container['description'] = $this->ask('Description of module:', $this->container['name']);
-        $this->container['namespace'] = $this->ask('Namespace of module:', $this->laravel->getNamespace() . $this->acceptedTypes[$this->moduleType] . '\\' . studly_case($this->container['alias']));
+        $this->container['namespace'] = $this->ask('Namespace of module:', rtrim($this->laravel->getNamespace(), '\\') . '\\' . $this->acceptedTypes[$this->moduleType] . '\\' . Str::studly($this->container['alias']));
         $this->container['version'] = $this->ask('Module version.', '1.0');
         $this->container['autoload'] = $this->ask('Autoloading type.', 'psr-4');
 

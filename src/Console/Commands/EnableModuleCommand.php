@@ -1,6 +1,7 @@
 <?php namespace Mrabbani\ModuleManager\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Composer;
 
 class EnableModuleCommand extends Command
@@ -55,13 +56,13 @@ class EnableModuleCommand extends Command
 
         if(!$this->container['alias']) {
             foreach ($plugins as $plugin) {
-                \ModulesManagement::enableModule(array_get($plugin, 'alias'));
+                \ModulesManagement::enableModule(Arr::get($plugin, 'alias'));
                 $count++;
             }
         } else {
             $plugins = $plugins->where('alias', '=', $this->container['alias']);
             foreach ($plugins as $plugin) {
-                \ModulesManagement::enableModule(array_get($plugin, 'alias'));
+                \ModulesManagement::enableModule(Arr::get($plugin, 'alias'));
                 $count++;
             }
         }

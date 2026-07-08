@@ -2,6 +2,7 @@
 
 use Illuminate\Support\ServiceProvider;
 use Mrabbani\ModuleManager\Support\Facades\ModulesManagementFacade;
+use Mrabbani\ModuleManager\Support\ModulesManagement;
 
 class ModuleProvider extends ServiceProvider
 {
@@ -32,6 +33,7 @@ class ModuleProvider extends ServiceProvider
         //Load helpers
         $this->loadHelpers();
 
+        $this->app->singleton(ModulesManagement::class);
         $this->app->register(ConsoleServiceProvider::class);
         $this->app->register(LoadModulesServiceProvider::class);
 

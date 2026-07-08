@@ -1,6 +1,7 @@
 <?php namespace Mrabbani\ModuleManager\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Composer;
 
 class DisableModuleCommand extends Command
@@ -56,13 +57,13 @@ class DisableModuleCommand extends Command
 
         if(!$this->container['alias']) {
             foreach ($plugins as $plugin) {
-                \ModulesManagement::disableModule(array_get($plugin, 'alias'));
+                \ModulesManagement::disableModule(Arr::get($plugin, 'alias'));
                 $count++;
             }
         } else {
             $plugins = $plugins->where('alias', '=', $this->container['alias']);
             foreach ($plugins as $plugin) {
-                \ModulesManagement::disableModule(array_get($plugin, 'alias'));
+                \ModulesManagement::disableModule(Arr::get($plugin, 'alias'));
                 $count++;
             }
         }

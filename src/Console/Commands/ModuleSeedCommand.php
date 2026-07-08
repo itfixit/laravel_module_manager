@@ -1,7 +1,7 @@
 <?php namespace Mrabbani\ModuleManager\Console\Commands;
 
 use Illuminate\Console\Command;
-use Composer\Autoload\ClassLoader;
+use Illuminate\Support\Str;
 use Mrabbani\ModuleManager\Console\ModuleInfoTrait;
 
 class ModuleSeedCommand extends Command
@@ -74,7 +74,7 @@ class ModuleSeedCommand extends Command
         
         $alias = $this->argument('alias');
 
-        $className =  $this->option('class') ?: studly_case(preg_replace('/\-/', '_', $alias)) . 'TableSeeder';
+        $className =  $this->option('class') ?: Str::studly(preg_replace('/\-/', '_', $alias)) . 'TableSeeder';
         
         $this->call('db:seed', [
             '--database' => $database,

@@ -88,13 +88,17 @@ class RouteListCommand extends Command
     }
     
     /**
-     * Set all available module's root namespace to $this->modulesNamespace
-     *
+     * Set all available module's root namespace to $this->modulesNamespace.
      */
     public function setModulesNamespace()
     {
+        $modules = [];
+
         if($this->module !== 'all') {
-            $modules[] = get_module_information($this->module);
+            $module = get_module_information($this->module);
+            if ($module) {
+                $modules[] = $module;
+            }
     
         } else {
             $modules = get_all_module_information();
@@ -108,16 +112,19 @@ class RouteListCommand extends Command
     }
     
     /**
-     * check route's action namespace is belongs to module's namespace
+     * Check whether a route namespace belongs to a module namespace.
      *
      * @param $namespace
      * @return bool
      */
     public function isBelongsToModule($namespace)
     {
+        if (! is_string($namespace) || $namespace === '') {
+            return false;
+        }
        
         foreach ($this->modulesNamespace as $moduleNamespace) {
-            if((strpos($namespace, $moduleNamespace)) === 0){
+            if (str_starts_with($namespace, $moduleNamespace)) {
                 return true;
             }
         }
@@ -168,6 +175,8 @@ class RouteListCommand extends Command
      */
     protected function getRouteInformation(Route $route)
     {
+        $namespace = $this->getRouteNamespace($route);
+
         return $this->filterRoute([
             'host'   => $route->domain(),
             'method' => implode('|', $route->methods()),
@@ -175,8 +184,25 @@ class RouteListCommand extends Command
             'name'   => $route->getName(),
             'action' => $route->getActionName(),
             'middleware' => $this->getMiddleware($route),
-            'namespace' => $route->getAction()['namespace']
+            'namespace' => $namespace
         ]);
+    }
+
+    protected function getRouteNamespace(Route $route): string
+    {
+        $action = $route->getAction();
+
+        if (isset($action['namespace']) && is_string($action['namespace'])) {
+            return $action['namespace'];
+        }
+
+        $controller = Arr::get($action, 'controller') ?: Arr::get($action, 'uses');
+
+        if (! is_string($controller) || $controller === '' || str_contains($controller, 'Closure')) {
+            return '';
+        }
+
+        return str_contains($controller, '@') ? strstr($controller, '@', true) : $controller;
     }
 
     /**
@@ -225,6 +251,10 @@ class RouteListCommand extends Command
      */
     protected function filterRoute(array $route)
     {
+        if ($route['namespace'] === '') {
+            return null;
+        }
+
         if($this->isBelongsToModule($route['namespace'])) {
             return $route;
         }

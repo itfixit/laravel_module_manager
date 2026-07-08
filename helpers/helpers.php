@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Support\Arr;
+
 if (!function_exists('plugins_base_path')) {
     /**
      * @param string $path
@@ -35,7 +37,7 @@ if (!function_exists('module_relative_path')) {
     function module_relative_path($alias)
     {
         $module = get_module_information($alias);
-        $path =str_replace('module.json', '', array_get($module, 'file', ''));
+        $path = str_replace('module.json', '', Arr::get($module, 'file', ''));
         $relativePath = str_replace(base_path() . '/', '', $path);
 
         return $relativePath;
@@ -48,9 +50,11 @@ if (!function_exists('get_all_module_information')) {
     function get_all_module_information()
     {
         $modulesArr = [];
-        $modulePluginDirectory = [
-            config('module_manager.module_directory')
-        ];
+        $modulePluginDirectory = array_values(array_filter(array_unique([
+            config('module_manager.module_directory'),
+            config('module_manager.plugin_directory'),
+        ])));
+
         foreach ($modulePluginDirectory as $type) {
             if(! $type) {
                 continue;
@@ -104,13 +108,22 @@ if (!function_exists('get_all_module_aliases')) {
 if (!function_exists('get_modules_by_type')) {
     /**
      * @param $type
-     * @return mixed
+     * @return \Illuminate\Support\Collection
      */
     function get_modules_by_type($type)
     {
+        $typeMap = [
+            'module' => config('module_manager.module_directory'),
+            'modules' => config('module_manager.module_directory'),
+            'plugin' => config('module_manager.plugin_directory'),
+            'plugins' => config('module_manager.plugin_directory'),
+        ];
+
+        $type = $typeMap[$type] ?? $type;
+
         return collect(get_all_module_information())
             ->where('type', '=', $type)
-            ->first();
+            ->values();
     }
 }
 
@@ -137,7 +150,7 @@ if (!function_exists('save_module_information')) {
                 $count++;
             }
         }
-        if (\File::exists(array_get($module, 'file'))) {
+        if (\File::exists(Arr::get($module, 'file'))) {
             $file = $module['file'];
             unset($module['file']);
             if (array_key_exists('type', $module)) {

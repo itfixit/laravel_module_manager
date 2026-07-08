@@ -4,6 +4,7 @@ use Exception;
 use Illuminate\Console\Command;
 use Illuminate\Database\Migrations\MigrationCreator;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Composer;
 
 class MakeMigration extends Command
@@ -118,7 +119,7 @@ class MakeMigration extends Command
     protected function getMigrationPath(): string
     {
         $module  = get_module_information($this->argument('alias'));
-        $baseDir = get_base_folder(array_get($module, 'file'));
+        $baseDir = get_base_folder(Arr::get($module, 'file'));
 
         return $baseDir . 'database/migrations';
     }

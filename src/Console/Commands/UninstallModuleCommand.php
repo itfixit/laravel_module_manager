@@ -1,6 +1,7 @@
 <?php namespace Mrabbani\ModuleManager\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Arr;
 
 class UninstallModuleCommand extends Command
 {
@@ -63,7 +64,7 @@ class UninstallModuleCommand extends Command
     {
 
         $module = get_module_information($this->argument('alias'));
-        $namespace = str_replace('\\\\', '\\', array_get($module, 'namespace', '') . '\Providers\UninstallModuleServiceProvider');
+        $namespace = str_replace('\\\\', '\\', Arr::get($module, 'namespace', '') . '\Providers\UninstallModuleServiceProvider');
         if(class_exists($namespace)) {
             $this->app->register($namespace);
 

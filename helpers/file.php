@@ -59,7 +59,7 @@ if (!function_exists('get_base_folder')) {
 
         $path = dirname($path);
 
-        if (!ends_with('/', $path)) {
+        if (! str_ends_with($path, '/')) {
             $path .= '/';
         }
 

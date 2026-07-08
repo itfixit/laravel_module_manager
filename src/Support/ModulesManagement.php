@@ -1,6 +1,7 @@
 <?php namespace Mrabbani\ModuleManager\Support;
 
 use \Closure;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Mrabbani\ModuleManager\Events\ModuleDisabled;
 use Mrabbani\ModuleManager\Events\ModuleEnabled;
@@ -47,7 +48,7 @@ class ModulesManagement
             return $this->modules;
         }
         foreach ($this->modules as $module) {
-            if (array_get($module, 'alias') === $alias) {
+            if (Arr::get($module, 'alias') === $alias) {
                 return $module;
             }
         }
@@ -166,10 +167,10 @@ class ModulesManagement
         if (!$module) {
             return $this;
         }
-        $moduleAutoloadType = array_get($module, 'autoload', 'psr-4');
-        $relativePath = str_replace(base_path() . DIRECTORY_SEPARATOR, '', str_replace('module.json', '', array_get($module, 'file', ''))) . 'src';
+        $moduleAutoloadType = Arr::get($module, 'autoload', 'psr-4');
+        $relativePath = str_replace(base_path() . DIRECTORY_SEPARATOR, '', str_replace('module.json', '', Arr::get($module, 'file', ''))) . 'src';
 
-        $moduleNamespace = array_get($module, 'namespace');
+        $moduleNamespace = Arr::get($module, 'namespace');
 
         if (!$moduleNamespace) {
             return $this;
@@ -183,9 +184,9 @@ class ModulesManagement
          * Composer information
          */
         $composerContent = json_decode(File::get(base_path('composer.json')), true);
-        $autoload = array_get($composerContent, 'autoload', []);
+        $autoload = Arr::get($composerContent, 'autoload', []);
 
-        if (!array_get($autoload, $moduleAutoloadType)) {
+        if (!Arr::get($autoload, $moduleAutoloadType)) {
             $autoload[$moduleAutoloadType] = [];
         }
 

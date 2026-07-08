@@ -1,6 +1,8 @@
 <?php namespace Mrabbani\ModuleManager\Console;
 
 use Illuminate\Console\GeneratorCommand;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 trait ModuleInfoTrait 
 {
@@ -16,7 +18,10 @@ trait ModuleInfoTrait
      */
     protected function resolveModuleRootFolder($module)
     {
-        switch (array_get($module, 'type')) {
+        switch (Arr::get($module, 'type')) {
+            case config('module_manager.plugin_directory'):
+                $path = plugins_base_path();
+                break;
             case config('module_manager.module_directory'):
                 $path = module_base_path();
                 break;
@@ -24,7 +29,7 @@ trait ModuleInfoTrait
                 $path = module_base_path();
                 break;
         }
-        if (!ends_with('/', $path)) {
+        if (! Str::endsWith($path, '/')) {
             $path .= '/';
         }
 
@@ -66,6 +71,6 @@ trait ModuleInfoTrait
         if (!$key) {
             return $this->moduleInformation;
         }
-        return array_get($this->moduleInformation, $key, null);
+        return Arr::get($this->moduleInformation, $key, null);
     }
 }

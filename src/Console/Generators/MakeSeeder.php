@@ -1,5 +1,7 @@
 <?php namespace Mrabbani\ModuleManager\Console\Generators;
 
+use Illuminate\Support\Str;
+
 class MakeSeeder extends AbstractGenerator
 {
     /**
@@ -52,7 +54,7 @@ class MakeSeeder extends AbstractGenerator
 
     protected function createModuleTableSeederIfNotExist()
     {
-        $moduleSeederClass = studly_case(preg_replace('/\-/', '_',  $this->argument('alias'))) . 'TableSeeder';
+        $moduleSeederClass = Str::studly(preg_replace('/\-/', '_',  $this->argument('alias'))) . 'TableSeeder';
 
         if ($this->alreadyExists($moduleSeederClass)) {
            

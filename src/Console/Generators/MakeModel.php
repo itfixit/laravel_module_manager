@@ -1,5 +1,7 @@
 <?php namespace Mrabbani\ModuleManager\Console\Generators;
 
+use Illuminate\Support\Str;
+
 class MakeModel extends AbstractGenerator
 {
     /**
@@ -96,7 +98,7 @@ class MakeModel extends AbstractGenerator
         $stub = str_replace([
             '{table}',
         ], [
-            snake_case(str_plural($this->argument('name'))),
+            Str::snake(Str::plural($this->argument('name'))),
         ], $stub);
     }
 }
